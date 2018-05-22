@@ -12,9 +12,6 @@
 const int LEFT_LIMIT = 12; // these are pulled up, so other end goes to ground
 const int RIGHT_LIMIT = 13;
 
-// Constants used numerically in the algorithms
-const int AMOUNT_OF_PULSES = 12; // maybe need, for tony?
-
 // declare states
 int DEFAULT_STATE = 1;
 int HIT_RIGHT_STATE = 2;
@@ -27,8 +24,9 @@ int _currentState;
 // adjust to adjust the speed of the robot. Could be tuned to make it drive straight too
 int LSpeed = 120;
 int RSpeed = 120;
-int Back_Delay = 2000; // should allow bot to get about 6 inches from wall
-int Turn_Delay = 1000; // should allow bot to turn ~90 degrees
+
+int Back_Delay = 700; // should allow bot to get about 6 inches from wall
+int Turn_Delay = 1700; // should allow bot to turn ~90 degrees
 
 unsigned long refreshTime = 0;
 unsigned long stateTime = 0;
@@ -37,12 +35,8 @@ unsigned long stateTime = 0;
 Adafruit_MotorShield motorShield = Adafruit_MotorShield();
 
 // Select which 'port' for each motor.
-Adafruit_DCMotor *leftMotor = motorShield.getMotor(1);
+Adafruit_DCMotor *leftMotor = motorShield.getMotor(3);
 Adafruit_DCMotor *rightMotor = motorShield.getMotor(4);
-
-// Initialize the LCD with the numbers of the interface pins
-LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
-
 
 void setup() 
 {
@@ -66,45 +60,28 @@ void setup()
 // the loop routine runs over and over again forever:
 void loop() 
 {
-  // Every quarter second clear the LCD and print to the serial monitor.
-  if ((millis() - refreshTime > 250))
-  {
-    refreshTime = millis();
-    // Prints the current state to the serial monitor. States are printed 
-    // to the screen for troubleshooting.
-    //Serial.println(currentState);
-    // Clears the LCD screen.
-    lcd.clear();
-  }
 
   if(_currentState == DEFAULT_STATE) // Just go forward
   {
 
     // go forward
     forward();
-    
-    // show state
-    lcd.setCursor(0, 0);
-    lcd.print("Forward");
 
     // check the limit switches
     if ((digitalRead(RIGHT_LIMIT) == LOW) && (digitalRead(LEFT_LIMIT) == LOW))
     {
       // Center hit
       _currentState = HIT_STATE;
-      Serial.println("Both");
     }
     else if (digitalRead(LEFT_LIMIT) == LOW)
     {
       // Left hit
       _currentState = HIT_LEFT_STATE;
-      Serial.println("Left");
     }
     else if (digitalRead(RIGHT_LIMIT) == LOW)
     {
       // Right hit
       _currentState = HIT_RIGHT_STATE;
-      Serial.println("Right");
     }
   }
 
@@ -142,7 +119,7 @@ void loop()
     backward();
     delay(Back_Delay);
 
-    // turn right
+    // turn all the way around
     right();
     delay(Turn_Delay * 2);
 
@@ -173,7 +150,7 @@ void backward()
 void left()
 {
   leftMotor->run(FORWARD);
-  leftMotor->setSpeed(5);
+  leftMotor->setSpeed(30);
   rightMotor->run(FORWARD);
   rightMotor->setSpeed(RSpeed);
 }
@@ -183,5 +160,5 @@ void right()
   leftMotor->run(FORWARD);
   leftMotor->setSpeed(LSpeed);
   rightMotor->run(FORWARD);
-  rightMotor->setSpeed(5);
+  rightMotor->setSpeed(30);
 }
