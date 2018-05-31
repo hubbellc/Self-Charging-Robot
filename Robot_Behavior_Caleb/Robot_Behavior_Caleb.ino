@@ -335,8 +335,9 @@ void right()
     }
 
     // assuming we are guarenteed that green line is found. Sit here while charging
-   leftMotor->run(RELEASE); 
-   rightMotor->run(RELEASE);
+    //delay(30); // add delay here if we want to go further into the base
+    leftMotor->run(RELEASE); 
+    rightMotor->run(RELEASE);
     while(1)
       Serial.println("CHARGING");
    
