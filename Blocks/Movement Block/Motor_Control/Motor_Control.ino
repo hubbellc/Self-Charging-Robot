@@ -6,7 +6,6 @@
 // Including Arduino's I2C library, as well as the motorshield, and LCD libraries.
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
-#include <LiquidCrystal.h>
 
 // Constants are defined for the physical elements connecting to the Arduino
 const int LEFT_LIMIT = 12; // these are pulled up, so other end goes to ground
