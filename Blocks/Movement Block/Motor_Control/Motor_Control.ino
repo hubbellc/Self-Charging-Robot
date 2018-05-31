@@ -10,6 +10,7 @@
 // Constants are defined for the physical elements connecting to the Arduino
 const int LEFT_LIMIT = 12; // these are pulled up, so other end goes to ground
 const int RIGHT_LIMIT = 13;
+const int BASE_PIN = 0;
 
 // declare states
 int DEFAULT_STATE = 1;
@@ -51,6 +52,7 @@ void setup()
   // Limit inputs enabled
   pinMode(LEFT_LIMIT, INPUT_PULLUP);
   pinMode(RIGHT_LIMIT, INPUT_PULLUP);
+  pinMode(BASE_PIN, INPUT);
 
   // go to first state
   _currentState = DEFAULT_STATE;
@@ -59,6 +61,12 @@ void setup()
 // the loop routine runs over and over again forever:
 void loop() 
 {
+  // see if at charger
+  if(digitalRead(BASE_PIN) == HIGH)
+  {
+    leftMotor->run(RELEASE);
+    rightMotor->run(RELEASE);
+  }
 
   if(_currentState == DEFAULT_STATE) // Just go forward
   {
